@@ -15,4 +15,4 @@ Temos também a lsitagem de cada um dos tópicos citados juntamente com um dashb
 
 A simulação de um backend foi criada utilizando as [API routes](https://nextjs.org/docs/api-routes/introduction) do Next.js, tendo como base o arquivo db.json simulando o banco de dados. As rotas encontram-se no caminho `src/pages/api/*`
 
-### Projeto desenvolvido por **Gabriel Ribeiro da Silva** ([gabrielrsilva98@gmail.com](mailto:gabrielrsilva98@gmail.com))
+#### Projeto desenvolvido por **Gabriel Ribeiro da Silva** ([gabrielrsilva98@gmail.com](mailto:gabrielrsilva98@gmail.com))
