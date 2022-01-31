@@ -17,22 +17,22 @@ export type Unit = {
 
 export async function getUnits() {
   async function deleteUnit(id: number) {
-    const { data } = await api.delete("unit/" + id);
+    const { data } = await api.delete("units/" + id);
 
-    if (data.success) {
+    if (data) {
       queryClient.invalidateQueries("units");
       notification["success"]({
         message: "Success",
-        description: data.message,
+        description: "Unit deleted successfully",
         duration: 3,
       });
     }
   }
 
-  const { data } = await api.get("/unit");
-  const companies = await api.get("company");
+  const { data } = await api.get("/units");
+  const companies = await api.get("companies");
 
-  const units: Unit[] = data.units;
+  const units: Unit[] = data;
 
   const tableColumns: ColumnsType<Unit> = [
     {
@@ -51,7 +51,7 @@ export async function getUnits() {
     {
       title: "Company",
       render: (_, record) => {
-        const content = companies.data.companies.find(
+        const content = companies.data.find(
           (company: Company) => company.id === record.companyId
         );
 

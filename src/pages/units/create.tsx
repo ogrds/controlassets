@@ -30,7 +30,7 @@ const NewUnit: NextPage = () => {
   const [companies, setCompanies] = useState<OptionsProps[]>([]);
 
   useEffect(() => {
-    api.get("company").then((res) => setCompanies(res.data.companies));
+    api.get("companies").then((res) => setCompanies(res.data));
   }, []);
 
   const router = useRouter();
@@ -38,7 +38,7 @@ const NewUnit: NextPage = () => {
   const create = useMutation(
     async (unit: CreateUnitFormData) => {
       const { name, companyId } = unit;
-      const res = await api.post("unit", {
+      const res = await api.post("units", {
         name,
         companyId,
       });
@@ -47,10 +47,10 @@ const NewUnit: NextPage = () => {
     },
     {
       onSuccess: (data) => {
-        if (data.success) {
+        if (data) {
           notification["success"]({
             message: "Success",
-            description: data.message,
+            description: "Unit created successfully",
             duration: 3,
           });
 
@@ -70,9 +70,9 @@ const NewUnit: NextPage = () => {
   const handleCreate: SubmitHandler<CreateUnitFormData> = async (
     values: CreateUnitFormData
   ) => {
-    const { success } = await create.mutateAsync(values);
+    const data = await create.mutateAsync(values);
 
-    if (success) {
+    if (data) {
       router.push("/units");
     }
   };

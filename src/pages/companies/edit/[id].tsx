@@ -39,7 +39,7 @@ const EditCompany: NextPage<EditCompanyProps> = (props) => {
   const update = useMutation(
     async (company: EditCompanyFormData) => {
       const { name } = company;
-      const res = await api.post("company/" + props.company.id, {
+      const res = await api.patch("companies/" + props.company.id, {
         name,
       });
 
@@ -47,10 +47,10 @@ const EditCompany: NextPage<EditCompanyProps> = (props) => {
     },
     {
       onSuccess: (data) => {
-        if (data.success) {
+        if (data) {
           notification["success"]({
             message: "Success",
-            description: data.message,
+            description: "Company updated successfully",
             duration: 3,
           });
 
@@ -74,9 +74,9 @@ const EditCompany: NextPage<EditCompanyProps> = (props) => {
   const handleUpdate: SubmitHandler<EditCompanyFormData> = async (
     values: EditCompanyFormData
   ) => {
-    const { success } = await update.mutateAsync(values);
+    const data = await update.mutateAsync(values);
 
-    if (success) {
+    if (data) {
       router.push("/companies");
     }
   };
@@ -141,11 +141,11 @@ export default EditCompany;
 export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext
 ) => {
-  const company = await api.get("company/" + ctx?.params?.id);
+  const company = await api.get("companies/" + ctx?.params?.id);
 
   return {
     props: {
-      company: company.data.company,
+      company: company.data,
     },
   };
 };

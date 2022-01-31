@@ -34,8 +34,8 @@ const NewAsset: NextPage = () => {
   const [units, setUnits] = useState<OptionsProps[]>([]);
 
   useEffect(() => {
-    api.get("company").then((res) => setCompanies(res.data.companies));
-    api.get("unit").then((res) => setUnits(res.data.units));
+    api.get("companies").then((res) => setCompanies(res.data));
+    api.get("units").then((res) => setUnits(res.data));
   }, []);
 
   const router = useRouter();
@@ -43,7 +43,7 @@ const NewAsset: NextPage = () => {
   const create = useMutation(
     async (asset: CreateAssetFormData) => {
       const { name, model, image, unitId, companyId } = asset;
-      const res = await api.post("asset", {
+      const res = await api.post("assets", {
         name,
         model,
         image,
@@ -55,10 +55,10 @@ const NewAsset: NextPage = () => {
     },
     {
       onSuccess: (data) => {
-        if (data.success) {
+        if (data) {
           notification["success"]({
             message: "Success",
-            description: data.message,
+            description: "Asset Created successfully",
             duration: 3,
           });
 
@@ -78,9 +78,9 @@ const NewAsset: NextPage = () => {
   const handleCreate: SubmitHandler<CreateAssetFormData> = async (
     values: CreateAssetFormData
   ) => {
-    const { success } = await create.mutateAsync(values);
+    const data = await create.mutateAsync(values);
 
-    if (success) {
+    if (data) {
       router.push("/assets");
     }
   };

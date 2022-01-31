@@ -55,7 +55,7 @@ const EditUser: NextPage<EditUserProps> = (props) => {
   const update = useMutation(
     async (user: EditUserFormData) => {
       const { name, email, unitId, companyId } = user;
-      const res = await api.post("user/" + props.user.id, {
+      const res = await api.patch("users/" + props.user.id, {
         name,
         email,
         unitId,
@@ -66,10 +66,10 @@ const EditUser: NextPage<EditUserProps> = (props) => {
     },
     {
       onSuccess: (data) => {
-        if (data.success) {
+        if (data) {
           notification["success"]({
             message: "Success",
-            description: data.message,
+            description: "User updated successfully",
             duration: 3,
           });
 
@@ -96,9 +96,9 @@ const EditUser: NextPage<EditUserProps> = (props) => {
   const handleUpdate: SubmitHandler<EditUserFormData> = async (
     values: EditUserFormData
   ) => {
-    const { success } = await update.mutateAsync(values);
+    const data = await update.mutateAsync(values);
 
-    if (success) {
+    if (data) {
       router.push("/users");
     }
   };
@@ -192,15 +192,15 @@ export default EditUser;
 export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext
 ) => {
-  const user = await api.get("user/" + ctx?.params?.id);
-  const company = await api.get("company");
-  const unit = await api.get("unit");
+  const user = await api.get("users/" + ctx?.params?.id);
+  const company = await api.get("companies");
+  const unit = await api.get("units");
 
   return {
     props: {
-      user: user.data.user,
-      companies: company.data.companies,
-      units: unit.data.units,
+      user: user.data,
+      companies: company.data,
+      units: unit.data,
     },
   };
 };

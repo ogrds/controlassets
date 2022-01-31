@@ -20,23 +20,23 @@ export type User = {
 
 export async function getUsers() {
   async function deleteUser(id: number) {
-    const { data } = await api.delete("user/" + id);
+    const { data } = await api.delete("users/" + id);
 
-    if (data.success) {
+    if (data) {
       queryClient.invalidateQueries("users");
       notification["success"]({
         message: "Success",
-        description: data.message,
+        description: "User deleted successfully",
         duration: 3,
       });
     }
   }
 
-  const { data } = await api.get("/user");
-  const companies = await api.get("company");
-  const units = await api.get("unit");
+  const { data } = await api.get("users");
+  const companies = await api.get("companies");
+  const units = await api.get("units");
 
-  const users: User[] = data.users;
+  const users: User[] = data;
 
   const tableColumns: ColumnsType<User> = [
     {
@@ -68,7 +68,7 @@ export async function getUsers() {
     {
       title: "Company",
       render: (_, record) => {
-        const content = companies.data.companies.find(
+        const content = companies.data.find(
           (company: Company) => company.id === record.companyId
         );
 
@@ -78,7 +78,7 @@ export async function getUsers() {
     {
       title: "Unit",
       render: (_, record) => {
-        const content = units.data.units.find(
+        const content = units.data.find(
           (unit: Unit) => unit.id === record.unitId
         );
 

@@ -13,6 +13,6 @@ Temos também a lsitagem de cada um dos tópicos citados juntamente com um dashb
 - [Highcharts](https://www.highcharts.com/) para os gráficos;
 - [React Query](https://react-query.tanstack.com/) para gerenciamento de exibição dos dados;
 
-A simulação de um backend foi criada utilizando as [API routes](https://nextjs.org/docs/api-routes/introduction) do Next.js, tendo como base o arquivo db.json simulando o banco de dados. As rotas encontram-se no caminho `src/pages/api/*`
+Foi utilizada uma [Fake API](https://github.com/tractian/fake-api) como simulação do backend.
 
 #### Projeto desenvolvido por **Gabriel Ribeiro da Silva** ([gabrielrsilva98@gmail.com](mailto:gabrielrsilva98@gmail.com))

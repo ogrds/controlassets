@@ -31,7 +31,7 @@ const NewCompany: NextPage = () => {
   const create = useMutation(
     async (company: CreateCompanyFormData) => {
       const { name } = company;
-      const res = await api.post("company", {
+      const res = await api.post("companies", {
         name,
       });
 
@@ -39,10 +39,10 @@ const NewCompany: NextPage = () => {
     },
     {
       onSuccess: (data) => {
-        if (data.success) {
+        if (data) {
           notification["success"]({
             message: "Success",
-            description: data.message,
+            description: "Company created successfully",
             duration: 3,
           });
 
@@ -62,9 +62,9 @@ const NewCompany: NextPage = () => {
   const handleCreate: SubmitHandler<CreateCompanyFormData> = async (
     values: CreateCompanyFormData
   ) => {
-    const { success } = await create.mutateAsync(values);
+    const data = await create.mutateAsync(values);
 
-    if (success) {
+    if (data) {
       router.push("/companies");
     }
   };

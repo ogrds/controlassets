@@ -15,21 +15,21 @@ export type Company = {
 
 export async function getCompanys() {
   async function deleteCompany(id: number) {
-    const { data } = await api.delete("company/" + id);
+    const { data } = await api.delete("companies/" + id);
 
-    if (data.success) {
+    if (data) {
       queryClient.invalidateQueries("companies");
       notification["success"]({
         message: "Success",
-        description: data.message,
+        description: "Company deleted successfully",
         duration: 3,
       });
     }
   }
 
-  const { data } = await api.get("/company");
+  const { data } = await api.get("/companies");
 
-  const companies: Company[] = data.companies;
+  const companies: Company[] = data;
 
   const tableColumns: ColumnsType<Company> = [
     {

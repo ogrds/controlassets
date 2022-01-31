@@ -11,7 +11,7 @@ import { Form, Col, Row, notification } from "antd";
 import Button from "antd-button-color";
 
 import { SaveOutlined } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { api } from "../../../services/api";
 import { queryClient } from "../../../services/queryClient";
 import { updateAssetsFormSchema } from "../../../services/yupValidations";
@@ -60,7 +60,7 @@ const EditAsset: NextPage<EditAssetProps> = (props) => {
   const update = useMutation(
     async (asset: EditAssetFormData) => {
       const { name, model, image, unitId, status, companyId } = asset;
-      const res = await api.post("asset/" + props.asset.id, {
+      const res = await api.patch("assets/" + props.asset.id, {
         name,
         model,
         image,
@@ -73,10 +73,10 @@ const EditAsset: NextPage<EditAssetProps> = (props) => {
     },
     {
       onSuccess: (data) => {
-        if (data.success) {
+        if (data) {
           notification["success"]({
             message: "Success",
-            description: data.message,
+            description: "Asset updated successfully",
             duration: 3,
           });
 
@@ -105,9 +105,9 @@ const EditAsset: NextPage<EditAssetProps> = (props) => {
   const handleUpdate: SubmitHandler<EditAssetFormData> = async (
     values: EditAssetFormData
   ) => {
-    const { success } = await update.mutateAsync(values);
+    const data = await update.mutateAsync(values);
 
-    if (success) {
+    if (data) {
       router.push("/assets");
     }
   };
@@ -221,15 +221,15 @@ export default EditAsset;
 export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext
 ) => {
-  const asset = await api.get("asset/" + ctx?.params?.id);
-  const company = await api.get("company");
-  const unit = await api.get("unit");
+  const asset = await api.get("assets/" + ctx?.params?.id);
+  const company = await api.get("companies");
+  const unit = await api.get("units");
 
   return {
     props: {
-      asset: asset.data.asset,
-      companies: company.data.companies,
-      units: unit.data.units,
+      asset: asset.data,
+      companies: company.data,
+      units: unit.data,
     },
   };
 };

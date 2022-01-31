@@ -49,7 +49,7 @@ const EditUnit: NextPage<EditUnitProps> = (props) => {
   const update = useMutation(
     async (unit: EditUnitFormData) => {
       const { name, companyId } = unit;
-      const res = await api.post("unit/" + props.unit.id, {
+      const res = await api.patch("units/" + props.unit.id, {
         name,
         companyId,
       });
@@ -58,10 +58,10 @@ const EditUnit: NextPage<EditUnitProps> = (props) => {
     },
     {
       onSuccess: (data) => {
-        if (data.success) {
+        if (data) {
           notification["success"]({
             message: "Success",
-            description: data.message,
+            description: "Unit updated successfully",
             duration: 3,
           });
 
@@ -86,9 +86,9 @@ const EditUnit: NextPage<EditUnitProps> = (props) => {
   const handleUpdate: SubmitHandler<EditUnitFormData> = async (
     values: EditUnitFormData
   ) => {
-    const { success } = await update.mutateAsync(values);
+    const data = await update.mutateAsync(values);
 
-    if (success) {
+    if (data) {
       router.push("/units");
     }
   };
@@ -163,13 +163,13 @@ export default EditUnit;
 export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext
 ) => {
-  const unit = await api.get("unit/" + ctx?.params?.id);
-  const company = await api.get("company");
+  const unit = await api.get("units/" + ctx?.params?.id);
+  const company = await api.get("companies");
 
   return {
     props: {
-      unit: unit.data.unit,
-      companies: company.data.companies,
+      unit: unit.data,
+      companies: company.data,
     },
   };
 };

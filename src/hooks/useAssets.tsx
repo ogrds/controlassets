@@ -34,23 +34,23 @@ export type Asset = {
 
 export async function getAssets() {
   async function deleteAsset(id: number) {
-    const { data } = await api.delete("asset/" + id);
+    const { data } = await api.delete("assets/" + id);
 
-    if (data.success) {
+    if (data) {
       queryClient.invalidateQueries("assets");
       notification["success"]({
         message: "Success",
-        description: data.message,
+        description: "Asset removed successfully",
         duration: 3,
       });
     }
   }
 
-  const { data } = await api.get("/asset");
-  const companies = await api.get("company");
-  const units = await api.get("unit");
+  const { data } = await api.get("assets");
+  const companies = await api.get("companies");
+  const units = await api.get("units");
 
-  const assets: Asset[] = data.assets;
+  const assets: Asset[] = data;
 
   const tableColumns: ColumnsType<Asset> = [
     {
@@ -82,7 +82,7 @@ export async function getAssets() {
     {
       title: "Company",
       render: (_, record) => {
-        const content = companies.data.companies.find(
+        const content = companies.data.find(
           (company: Company) => company.id === record.companyId
         );
 
@@ -92,7 +92,7 @@ export async function getAssets() {
     {
       title: "Unit",
       render: (_, record) => {
-        const content = units.data.units.find(
+        const content = units.data.find(
           (unit: Unit) => unit.id === record.unitId
         );
 

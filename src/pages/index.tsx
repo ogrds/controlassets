@@ -2,8 +2,6 @@ import { Col, Row } from "antd";
 import type { NextPage } from "next";
 import Sidebar from "../components/Sidebar";
 
-import { Select } from "../components/Forms/Select";
-
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { columnChartOptions } from "../utils/generateChartData";

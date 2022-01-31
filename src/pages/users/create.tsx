@@ -33,8 +33,8 @@ const NewUser: NextPage = () => {
   const [units, setUnits] = useState<OptionsProps[]>([]);
 
   useEffect(() => {
-    api.get("company").then((res) => setCompanies(res.data.companies));
-    api.get("unit").then((res) => setUnits(res.data.units));
+    api.get("companies").then((res) => setCompanies(res.data));
+    api.get("units").then((res) => setUnits(res.data));
   }, []);
 
   const router = useRouter();
@@ -42,7 +42,7 @@ const NewUser: NextPage = () => {
   const create = useMutation(
     async (user: CreateUserFormData) => {
       const { name, email, unitId, companyId } = user;
-      const res = await api.post("user", {
+      const res = await api.post("users", {
         name,
         email,
         unitId,
@@ -53,10 +53,10 @@ const NewUser: NextPage = () => {
     },
     {
       onSuccess: (data) => {
-        if (data.success) {
+        if (data) {
           notification["success"]({
             message: "Success",
-            description: data.message,
+            description: "User created successfully",
             duration: 3,
           });
 
@@ -76,9 +76,9 @@ const NewUser: NextPage = () => {
   const handleCreate: SubmitHandler<CreateUserFormData> = async (
     values: CreateUserFormData
   ) => {
-    const { success } = await create.mutateAsync(values);
+    const data = await create.mutateAsync(values);
 
-    if (success) {
+    if (data) {
       router.push("/users");
     }
   };
